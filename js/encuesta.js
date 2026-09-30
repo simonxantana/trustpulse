@@ -7,10 +7,15 @@
  * cuántas citas al mes se le van por el teléfono, con sus propios números.
  *
  * No se pide ningún dato personal ni de clientes. Las respuestas se guardan
- * con la función encuesta_responder de la base de datos de Bastia, que solo
- * acepta el código del enlace; sin código válido la encuesta funciona igual
- * pero no guarda nada. Las claves de cada respuesta son las mismas que
- * valida la base de datos: si se cambia una aquí hay que cambiarla allí.
+ * con la función encuesta_responder de la base de datos, que solo acepta el
+ * código del enlace; sin código válido la encuesta funciona igual pero no
+ * guarda nada. Las claves de cada respuesta son las mismas que valida la
+ * base de datos: si se cambia una aquí hay que cambiarla allí.
+ *
+ * El sitio no lleva marca ni logotipo a propósito: es una encuesta, no un
+ * anuncio. La única mención al servicio es la casilla del final, y quien la
+ * marca está pidiendo que se lo enseñen (por eso la base de datos guarda la
+ * fecha y la hora de ese toque).
  */
 (function () {
   "use strict";
@@ -35,7 +40,7 @@
   // De «ayer se quedaron sin coger…» a llamadas al día: el extremo bajo de cada
   // tramo, para que la cuenta se quede corta antes que larga.
   var PERDIDAS_AL_DIA = { ninguna: 0, una_dos: 1, tres_cinco: 3, mas_cinco: 6, no_se: 1 };
-  // Los mismos supuestos prudentes que la calculadora de bastia.es.
+  // Supuestos prudentes: mejor quedarse corto que largo con la cuenta de otro.
   var SUPUESTOS = { noVuelven: 40, sonCita: 50, dias: 22 };
   var TICKET = { inicial: 45, min: 25, max: 150, paso: 5 };
   var PERDIDAS = { min: 0, max: 15, paso: 1 };
@@ -177,7 +182,10 @@
   function opcion(texto, marcada, alTocar) {
     return el("button", { type: "button", clase: "encuesta-opcion" + (marcada ? " marcada" : ""), "aria-pressed": marcada ? "true" : "false", alClick: alTocar, texto: texto });
   }
-  function siNo(pregunta, campo, si, no) {
+  // Un sí/no de la pantalla de la cuenta. La «ayuda» (opcional) va debajo de
+  // la pregunta y dice en llano qué pasa al marcar sí: la casilla del servicio
+  // es una petición de la clínica, y tiene que entenderse antes de tocarla.
+  function siNo(pregunta, campo, si, no, ayuda) {
     function boton(texto, valor) {
       var b = el("button", { type: "button", clase: e[campo] === valor ? "marcada" : "", "aria-pressed": e[campo] === valor ? "true" : "false", texto: texto });
       b.addEventListener("click", function () {
@@ -189,12 +197,13 @@
       });
       return b;
     }
-    return el("div", { clase: "encuesta-sino" }, el("p", { texto: pregunta }), el("div", { role: "group", "aria-label": pregunta }, boton(si, true), boton(no, false)));
+    return el("div", { clase: "encuesta-sino" }, el("p", { texto: pregunta }),
+      ayuda ? el("p", { clase: "encuesta-sino-ayuda", texto: ayuda }) : null,
+      el("div", { role: "group", "aria-label": pregunta }, boton(si, true), boton(no, false)));
   }
 
   function pintarPregunta(cuerpo, numero) {
     var pregunta = PREGUNTAS[numero - 1];
-    if (numero === 1) cuerpo.appendChild(el("img", { clase: "encuesta-perro", src: "img/agente.webp", alt: "", width: "120", height: "120" }));
     if (numero === 2 && e.r1SinTocar) {
       cuerpo.appendChild(el("p", { clase: "encuesta-apuntada" }, "Primera respuesta apuntada: ", el("b", { texto: textoDe(PREGUNTAS[0], e.respuestas.r1) }), ". ",
         el("button", { type: "button", texto: "Cambiarla", alClick: function () { ir(1); } })));
@@ -274,28 +283,43 @@
     refrescar();
 
     cuerpo.appendChild(el("h2", { texto: "Dos cosas más, si queréis" }));
-    cuerpo.appendChild(siNo("En noviembre tendré lo que han contestado las demás clínicas de Andalucía. ¿Os lo mando?", "quiereEstudio", "Sí, mándanoslo", "No hace falta"));
-    cuerpo.appendChild(siNo("Estoy montando un servicio que coge el teléfono de la clínica cuando vosotros no podéis. ¿Os lo enseño cuando esté listo?", "quiereVer", "Sí, enséñanoslo", "Ahora no"));
+    cuerpo.appendChild(siNo("En diciembre tendré lo que han contestado las demás clínicas de Andalucía. ¿Os lo mando?", "quiereEstudio", "Sí, mándanoslo", "No hace falta"));
+    // La casilla: la única mención al servicio en todo el sitio. Se dice claro
+    // qué se pide para que el sí sea una petición de verdad (y la prueba legal
+    // de que la clínica quiso que se le llamara).
+    cuerpo.appendChild(siNo("Estoy montando un servicio de recepción telefónica para clínicas pequeñas. ¿Queréis que os lo enseñe?", "quiereVer", "Sí, enseñádnoslo", "Ahora no",
+      "Si decís que sí, me pedís que os llame o os escriba para enseñároslo. Nada más."));
     cuerpo.appendChild(el("button", { type: "button", clase: "encuesta-boton", texto: "Terminar", alClick: function () { guardar(true); ir("gracias"); } }));
   }
 
   function pintarGracias(cuerpo) {
     var caja = el("div", { clase: "encuesta-gracias" });
-    caja.appendChild(el("img", { src: "img/descanso.webp", alt: "", width: "220", height: "165" }));
     caja.appendChild(el("h1", { tabindex: "-1" }, "Gracias. ", el("em", { texto: "Eso era todo." })));
     var guardada = !!codigo && e.guardado === "ok";
     var texto = (guardada ? (e.yaEstaba ? "Vuestra clínica ya había contestado antes; gracias por repasarlo. " : "Vuestras respuestas ya están apuntadas. ") : "Gracias por el rato. ") +
-      (guardada && e.quiereEstudio ? "En noviembre os llegará lo que han dicho las demás clínicas. " : "") +
-      "No os escribiré para nada que no hayáis pedido.";
+      (guardada && e.quiereEstudio ? "En diciembre os llegará lo que han dicho las demás clínicas. " : "") +
+      (guardada ? "Os mandaré vuestra cuenta por correo, por si queréis guardarla; nada más que no hayáis pedido." : "No os escribiré para nada que no hayáis pedido.");
     caja.appendChild(el("p", { texto: texto }));
+    if (e.quiereVer === true) {
+      // Solo a quien lo ha pedido con la casilla: el número de la clínica de
+      // prueba para oír el servicio ahora mismo, sin esperar a nadie. Si la
+      // petición no ha llegado a la base de datos (sin código, código
+      // desconocido o fallo), el aviso no saltará, así que se da el correo.
+      var sinAviso = !codigo || e.guardado === "fallo" || e.guardado === "desconocido";
+      caja.appendChild(el("div", { clase: "encuesta-demo", role: "status" },
+        el("p", {}, "Como habéis pedido verlo: lo más rápido es llamar ahora al ", el("a", { href: "tel:+34951791054", texto: "951 79 10 54" }),
+          " y pedir cita para vuestro perro como si fuerais un cliente. Es la recepción de una clínica de prueba; no pasa nada."),
+        el("p", {}, "Simón os llama en menos de una hora en horario de clínica y, si no cogéis, os escribe." +
+          (sinAviso ? " Si no os llama nadie, escribidle a simon@trustpulse.es." : ""))));
+    }
     if (e.guardado === "fallo") {
       caja.appendChild(el("p", { clase: "encuesta-aviso", role: "status" }, "No hemos podido guardar vuestras respuestas. ",
         el("button", { type: "button", texto: "Volver a intentarlo", alClick: function () { guardar(true); } })));
     } else if (!codigo || e.guardado === "desconocido") {
       caja.appendChild(el("p", { clase: "encuesta-aviso", role: "status" }, "Con este enlace no reconocemos vuestra clínica, así que no se ha guardado nada. Abrid la encuesta desde el correo o escribidme a ",
-        el("a", { href: "mailto:info@bastia.es", texto: "info@bastia.es" }), "."));
+        el("a", { href: "mailto:simon@trustpulse.es", texto: "simon@trustpulse.es" }), "."));
     }
-    caja.appendChild(el("p", { clase: "encuesta-firma" }, "Simón · ", el("a", { href: "mailto:info@bastia.es", texto: "info@bastia.es" })));
+    caja.appendChild(el("p", { clase: "encuesta-firma" }, "Simón · ", el("a", { href: "mailto:simon@trustpulse.es", texto: "simon@trustpulse.es" })));
     cuerpo.appendChild(caja);
   }
 
@@ -305,7 +329,8 @@
     var numero = typeof p === "number" ? p : p === "programa" ? 4 : 6;
     app.textContent = "";
 
-    var cabecera = el("header", { clase: "encuesta-cabecera" }, el("a", { href: "https://bastia.es", clase: "encuesta-marca", texto: "Bastia" }));
+    // Sin marca ni enlace en la cabecera: solo el nombre de la encuesta.
+    var cabecera = el("header", { clase: "encuesta-cabecera" }, el("span", { clase: "encuesta-marca", texto: "Encuesta del teléfono" }));
     if (enPreguntas) cabecera.appendChild(el("span", { clase: "encuesta-paso", texto: "Pregunta " + numero + " de 6" }));
     app.appendChild(cabecera);
     if (enPreguntas) {
@@ -322,7 +347,7 @@
     app.appendChild(cuerpo);
 
     app.appendChild(el("p", { clase: "encuesta-pie" }, "No pedimos nombres ni datos de clientes: solo vuestras respuestas. ",
-      el("a", { href: "https://bastia.es/privacidad", texto: "Privacidad" }), " · ", el("a", { href: "https://bastia.es/aviso-legal", texto: "Aviso legal" })));
+      el("a", { href: "/privacidad/", texto: "Privacidad" })));
 
     // Al cambiar de pantalla, arriba del todo y con el foco en la pregunta
     // (teclado y lectores de pantalla). En la primera carga no se toca nada.

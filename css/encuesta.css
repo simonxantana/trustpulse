@@ -1,6 +1,6 @@
 /* La encuesta de trustpulse.es: una pregunta por pantalla, pensada para
-   contestarse con el pulgar en un móvil, entre consulta y consulta. Misma
-   voz visual que Bastia (crema, terracota, serifa en cursiva para el acento). */
+   contestarse con el pulgar en un móvil, entre consulta y consulta. Crema,
+   terracota y serifa en cursiva para el acento; sin logotipo ni marca. */
 
 @font-face {
   font-family: "DM Sans";
@@ -39,7 +39,6 @@ img { max-width: 100%; }
 .encuesta-cuerpo { flex: 1; width: min(560px, 100%); margin: 0 auto; padding: 22px max(5vw, 22px) 40px; }
 .encuesta-atras { margin: 0 0 14px -8px; padding: 8px; border: 0; background: none; color: var(--apagado); font-size: 14px; cursor: pointer; }
 .encuesta-atras:hover { color: var(--tinta); }
-.encuesta-perro { display: block; width: 120px; height: 120px; margin: 0 0 6px -8px; }
 .encuesta-apuntada { margin: 0 0 18px; padding: 10px 14px; border-radius: 14px; background: #e4eadf; color: #34423a; font-size: 14px; line-height: 1.5; }
 .encuesta-apuntada button { padding: 0; border: 0; background: none; color: #34423a; text-decoration: underline; cursor: pointer; }
 .encuesta-eyebrow { margin: 0 0 10px; color: var(--terracota); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
@@ -103,6 +102,8 @@ img { max-width: 100%; }
 
 .encuesta-sino { padding: 14px 0; border-top: 1px solid rgba(33, 30, 26, .12); }
 .encuesta-sino p { margin: 0 0 10px; color: #443d34; font-size: 15.5px; line-height: 1.55; }
+/* La línea de ayuda de la casilla: más pequeña y apagada, pero legible, porque dice qué se pide al tocar «sí». */
+.encuesta-sino .encuesta-sino-ayuda { margin: -4px 0 12px; color: var(--apagado); font-size: 13.5px; line-height: 1.5; }
 .encuesta-sino div { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .encuesta-sino button {
   min-height: 48px; padding: 8px 12px; border: 1.5px solid rgba(33, 30, 26, .18); border-radius: 999px;
@@ -111,15 +112,33 @@ img { max-width: 100%; }
 .encuesta-sino button.marcada { border-color: var(--salvia); background: var(--salvia); color: #fff9ee; }
 
 .encuesta-gracias { padding-top: 12px; text-align: center; }
-.encuesta-gracias img { display: block; width: 220px; height: auto; margin: 0 auto 8px; }
 .encuesta-gracias p { margin: 0 auto 12px; max-width: 42ch; color: #443d34; font-size: 16px; line-height: 1.6; }
 .encuesta-aviso { padding: 12px 14px; border-radius: 14px; background: #f1dccf; color: #6b2f1c; font-size: 14.5px; line-height: 1.5; }
 .encuesta-aviso button { padding: 0; border: 0; background: none; color: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
 .encuesta-aviso a { color: inherit; font-weight: 700; }
+/* La caja de la demo: solo para quien marcó «sí, enseñádnoslo». Mismo verde
+   salvia claro que la respuesta apuntada, pero más grande, porque lleva el
+   número al que llamar y es lo primero que tiene que ver. */
+.encuesta-demo { margin: 0 auto 14px; padding: 16px 18px; border-radius: 18px; background: #e4eadf; color: #34423a; text-align: left; }
+.encuesta-gracias .encuesta-demo p { margin: 0 0 10px; max-width: none; color: #34423a; font-size: 16px; line-height: 1.55; }
+.encuesta-gracias .encuesta-demo p:last-child { margin-bottom: 0; }
+.encuesta-demo a { color: #34423a; font-weight: 700; font-size: 18px; white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; }
+.encuesta-demo a:focus-visible { outline: 2px solid var(--salvia); outline-offset: 3px; }
 .encuesta-gracias .encuesta-firma { margin-top: 22px; color: var(--apagado); font-size: 14.5px; }
-.encuesta-firma a, .encuesta-pie a { color: #8f4329; text-decoration: underline; text-underline-offset: 2px; }
+.encuesta-firma a, .encuesta-pie a, .encuesta-texto a { color: #8f4329; text-decoration: underline; text-underline-offset: 2px; }
 
 .encuesta-pie { width: min(560px, 100%); margin: 0 auto; padding: 0 max(5vw, 22px) 28px; font-size: 12.5px; line-height: 1.5; color: var(--apagado); }
+
+/* Una página de texto seguido (la de privacidad): títulos claros y párrafos
+   cortos, con el mismo ancho que la encuesta para leerse bien en el móvil. */
+.encuesta-texto h1 { margin-bottom: 8px; }
+.encuesta-texto h2 { margin: 30px 0 8px; font-size: 19px; }
+.encuesta-texto p, .encuesta-texto li { color: #443d34; font-size: 16px; line-height: 1.6; }
+.encuesta-texto p { margin: 0 0 12px; }
+.encuesta-texto ul { margin: 0 0 12px; padding-left: 22px; }
+.encuesta-texto li { margin-bottom: 6px; }
+.encuesta-texto a:focus-visible { outline: 2px solid var(--terracota); outline-offset: 3px; }
+.encuesta-texto .encuesta-fecha { margin-top: 30px; color: var(--apagado); font-size: 13.5px; }
 
 @media (max-width: 380px) { .encuesta-opciones.dos { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) {
@@ -127,7 +146,3 @@ img { max-width: 100%; }
   .encuesta-opcion:active { transform: none; }
 }
 
-/* Las ilustraciones traen su propio fondo crema: se enseñan como una ficha redondeada. */
-.encuesta-perro, .encuesta-gracias img { border-radius: 26px; }
-.encuesta-perro { margin: 0 0 16px; }
-.encuesta-gracias img { margin-bottom: 18px; }

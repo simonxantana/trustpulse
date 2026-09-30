@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>No recibir más correos</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f6f1e8">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/encuesta.css">
+</head>
+<body>
+  <main class="encuesta-shell">
+    <header class="encuesta-cabecera"><a href="https://bastia.es" class="encuesta-marca">Bastia</a></header>
+    <section class="encuesta-cuerpo">
+      <div id="pregunta">
+        <h1>¿No queréis recibir <em>más correos míos?</em></h1>
+        <p class="encuesta-ayuda" style="margin-top:0">Un toque y no os vuelvo a escribir. Soy Simón, de Bastia (Málaga).</p>
+        <button type="button" class="encuesta-boton" id="boton-baja" hidden>Darme de baja</button>
+        <p class="encuesta-aviso" id="sin-codigo" hidden>Este enlace no está completo. Escribidme a <a href="mailto:info@bastia.es">info@bastia.es</a> con la palabra BAJA y os quito de la lista.</p>
+        <p class="encuesta-aviso" id="fallo" role="status" style="margin-top:14px" hidden>No ha funcionado. Probad otra vez o escribid BAJA a <a href="mailto:info@bastia.es">info@bastia.es</a>.</p>
+        <noscript><p class="encuesta-aviso">Escribidme a info@bastia.es con la palabra BAJA y os quito de la lista.</p></noscript>
+      </div>
+      <div id="hecho" hidden>
+        <h1 tabindex="-1">Hecho. <em>No os escribo más.</em></h1>
+        <p class="encuesta-ayuda" style="margin-top:0">Perdonad la molestia y gracias por avisar.</p>
+      </div>
+    </section>
+    <p class="encuesta-pie"><a href="https://bastia.es/privacidad">Privacidad</a> · <a href="https://bastia.es/aviso-legal">Aviso legal</a></p>
+  </main>
+  <script src="../js/config.js"></script>
+  <script src="../js/baja.js"></script>
+</body>
+</html>

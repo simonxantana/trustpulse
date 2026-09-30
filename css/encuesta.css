@@ -1,0 +1,133 @@
+/* La encuesta de trustpulse.es: una pregunta por pantalla, pensada para
+   contestarse con el pulgar en un móvil, entre consulta y consulta. Misma
+   voz visual que Bastia (crema, terracota, serifa en cursiva para el acento). */
+
+@font-face {
+  font-family: "DM Sans";
+  src: url("../fonts/dm-sans-latin.woff2") format("woff2");
+  font-weight: 100 1000; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Newsreader";
+  src: url("../fonts/newsreader-italic-latin.woff2") format("woff2");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+
+:root {
+  --tinta: #211e1a; --crema: #f6f1e8; --papel: #fffaf1; --arena: #e8ddca; --terracota: #a65337;
+  --salvia: #5d6c55; --apagado: #6f655a; --linea: rgba(33, 30, 26, .15);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--crema); color: var(--tinta);
+  font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+}
+button, input { font: inherit; color: inherit; }
+button:disabled { cursor: not-allowed; opacity: .65; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+
+.encuesta-shell { min-height: 100svh; display: flex; flex-direction: column; }
+.encuesta-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px max(5vw, 22px); }
+.encuesta-marca { font-weight: 800; font-size: 22px; letter-spacing: -.06em; color: var(--tinta); text-decoration: none; }
+.encuesta-paso { font-size: 13px; color: var(--apagado); font-variant-numeric: tabular-nums; }
+.encuesta-progreso { height: 4px; background: rgba(33, 30, 26, .1); }
+.encuesta-progreso span { display: block; height: 100%; background: var(--terracota); border-radius: 0 999px 999px 0; transition: width .25s ease; }
+
+.encuesta-cuerpo { flex: 1; width: min(560px, 100%); margin: 0 auto; padding: 22px max(5vw, 22px) 40px; }
+.encuesta-atras { margin: 0 0 14px -8px; padding: 8px; border: 0; background: none; color: var(--apagado); font-size: 14px; cursor: pointer; }
+.encuesta-atras:hover { color: var(--tinta); }
+.encuesta-perro { display: block; width: 120px; height: 120px; margin: 0 0 6px -8px; }
+.encuesta-apuntada { margin: 0 0 18px; padding: 10px 14px; border-radius: 14px; background: #e4eadf; color: #34423a; font-size: 14px; line-height: 1.5; }
+.encuesta-apuntada button { padding: 0; border: 0; background: none; color: #34423a; text-decoration: underline; cursor: pointer; }
+.encuesta-eyebrow { margin: 0 0 10px; color: var(--terracota); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+
+.encuesta-cuerpo h1 { margin: 0 0 18px; font-size: clamp(27px, 7vw, 38px); font-weight: 560; letter-spacing: -.035em; line-height: 1.1; text-wrap: balance; }
+.encuesta-cuerpo h1:focus { outline: none; }
+.encuesta-cuerpo h1 em { font-family: "Newsreader", Georgia, serif; font-style: italic; font-weight: 400; color: var(--terracota); }
+.encuesta-cuerpo h2 { margin: 34px 0 12px; font-size: 19px; font-weight: 600; letter-spacing: -.02em; }
+.encuesta-ayuda { margin: -8px 0 18px; color: var(--apagado); font-size: 14.5px; line-height: 1.5; }
+
+/* Las respuestas: grandes, de una columna, para no fallar con el pulgar */
+.encuesta-opciones { display: grid; gap: 10px; }
+.encuesta-opciones.dos { grid-template-columns: 1fr 1fr; }
+.encuesta-opcion {
+  display: flex; align-items: center; width: 100%; min-height: 60px; padding: 12px 20px;
+  border: 1.5px solid rgba(33, 30, 26, .18); border-radius: 18px; background: var(--papel); color: var(--tinta);
+  font-size: 17px; font-weight: 600; line-height: 1.25; text-align: left; cursor: pointer;
+  transition: border-color .15s, background .15s, transform .15s;
+}
+.encuesta-opcion:hover { border-color: var(--terracota); }
+.encuesta-opcion:active { transform: scale(.985); }
+.encuesta-opcion.marcada { border-color: var(--terracota); background: var(--terracota); color: #fff9ee; }
+.encuesta-opcion:focus-visible, .encuesta-boton:focus-visible, .encuesta-sino button:focus-visible,
+.encuesta-atras:focus-visible, .encuesta-apuntada button:focus-visible, .encuesta-aviso button:focus-visible,
+.encuesta-marca:focus-visible, .encuesta-pie a:focus-visible { outline: 2px solid var(--terracota); outline-offset: 3px; }
+
+.encuesta-otro { display: grid; gap: 8px; margin-top: 18px; }
+.encuesta-otro label { font-size: 14.5px; color: #443d34; }
+.encuesta-otro input {
+  min-height: 54px; padding: 0 16px; border: 1.5px solid rgba(33, 30, 26, .55); border-radius: 14px;
+  background: var(--papel); color: var(--tinta); font-size: 17px;
+}
+.encuesta-otro input:focus { outline: 2px solid var(--terracota); outline-offset: 2px; }
+
+.encuesta-boton {
+  display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 58px;
+  margin-top: 18px; padding: 0 24px; border: 0; border-radius: 999px; background: var(--terracota); color: #fff9ee;
+  font-weight: 700; font-size: 16px; cursor: pointer;
+}
+.encuesta-boton:hover { background: #95492f; }
+
+/* La cuenta */
+.cuenta-tarjeta { display: flex; flex-direction: column; gap: 22px; margin-top: 6px; padding: 22px 18px; border: 1px solid var(--linea); border-radius: 26px; background: var(--papel); box-shadow: 0 24px 60px rgba(42, 34, 26, .08); }
+.cuenta-resultado { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.cuenta-resultado div { display: flex; flex-direction: column; gap: 4px; }
+.cuenta-resultado strong { font-family: "Newsreader", Georgia, serif; font-style: italic; font-weight: 400; font-size: 30px; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.cuenta-resultado span { font-size: 12.5px; color: var(--apagado); line-height: 1.4; }
+.cuenta-euros { grid-column: 1 / -1; padding: 16px 18px; border-radius: 18px; background: var(--terracota); color: #fff9ee; }
+.cuenta-euros strong { font-size: 40px; }
+.cuenta-resultado .cuenta-euros span { color: #fff9ee; }
+.cuenta-controles { display: grid; gap: 18px; }
+.cuenta-control { display: grid; gap: 8px; }
+.cuenta-etiqueta { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; font-size: 13.5px; color: #5b554a; }
+.cuenta-etiqueta b { font-variant-numeric: tabular-nums; font-size: 15px; color: var(--tinta); white-space: nowrap; }
+.cuenta-control input[type="range"] { width: 100%; margin: 8px 0; appearance: none; -webkit-appearance: none; height: 4px; border-radius: 999px; background: var(--arena); cursor: pointer; }
+.cuenta-control input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; border: 3px solid var(--papel); border-radius: 50%; background: var(--terracota); box-shadow: 0 2px 10px rgba(103, 47, 30, .3); }
+.cuenta-control input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border: 3px solid var(--papel); border-radius: 50%; background: var(--terracota); box-shadow: 0 2px 10px rgba(103, 47, 30, .3); }
+.cuenta-control input[type="range"]::-moz-range-track { height: 4px; border-radius: 999px; background: var(--arena); }
+.cuenta-control input[type="range"]:focus-visible { outline: 2px solid var(--terracota); outline-offset: 8px; }
+.cuenta-supuestos { margin: -8px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--apagado); }
+
+.encuesta-sino { padding: 14px 0; border-top: 1px solid rgba(33, 30, 26, .12); }
+.encuesta-sino p { margin: 0 0 10px; color: #443d34; font-size: 15.5px; line-height: 1.55; }
+.encuesta-sino div { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.encuesta-sino button {
+  min-height: 48px; padding: 8px 12px; border: 1.5px solid rgba(33, 30, 26, .18); border-radius: 999px;
+  background: var(--papel); color: var(--tinta); font-size: 15px; font-weight: 600; cursor: pointer;
+}
+.encuesta-sino button.marcada { border-color: var(--salvia); background: var(--salvia); color: #fff9ee; }
+
+.encuesta-gracias { padding-top: 12px; text-align: center; }
+.encuesta-gracias img { display: block; width: 220px; height: auto; margin: 0 auto 8px; }
+.encuesta-gracias p { margin: 0 auto 12px; max-width: 42ch; color: #443d34; font-size: 16px; line-height: 1.6; }
+.encuesta-aviso { padding: 12px 14px; border-radius: 14px; background: #f1dccf; color: #6b2f1c; font-size: 14.5px; line-height: 1.5; }
+.encuesta-aviso button { padding: 0; border: 0; background: none; color: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
+.encuesta-aviso a { color: inherit; font-weight: 700; }
+.encuesta-gracias .encuesta-firma { margin-top: 22px; color: var(--apagado); font-size: 14.5px; }
+.encuesta-firma a, .encuesta-pie a { color: #8f4329; text-decoration: underline; text-underline-offset: 2px; }
+
+.encuesta-pie { width: min(560px, 100%); margin: 0 auto; padding: 0 max(5vw, 22px) 28px; font-size: 12.5px; line-height: 1.5; color: var(--apagado); }
+
+@media (max-width: 380px) { .encuesta-opciones.dos { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) {
+  .encuesta-progreso span, .encuesta-opcion { transition: none; }
+  .encuesta-opcion:active { transform: none; }
+}
+
+/* Las ilustraciones traen su propio fondo crema: se enseñan como una ficha redondeada. */
+.encuesta-perro, .encuesta-gracias img { border-radius: 26px; }
+.encuesta-perro { margin: 0 0 16px; }
+.encuesta-gracias img { margin-bottom: 18px; }

@@ -7,7 +7,7 @@ guion), alojado en GitHub Pages con el dominio trustpulse.es.
 Es una encuesta, no un anuncio, y el sitio lo cumple a rajatabla: sin
 logotipo, sin marca comercial, sin enlaces a ninguna web de producto. La
 cabecera solo dice «Encuesta del teléfono» y el único contacto es
-`simon@trustpulse.es`. La única mención al servicio es la casilla del final
+`simon@encuesta.trustpulse.es`. La única mención al servicio es la casilla del final
 de la cuenta («¿Queréis que os lo enseñe?»): quien la marca está pidiendo que
 se le llame o se le escriba, y la base de datos guarda la fecha y la hora de
 ese toque. Solo a esa clínica se le enseña, en la pantalla de gracias, el

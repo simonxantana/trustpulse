@@ -310,16 +310,16 @@
         el("p", {}, "Como habéis pedido verlo: lo más rápido es llamar ahora al ", el("a", { href: "tel:+34951791054", texto: "951 79 10 54" }),
           " y pedir cita para vuestro perro como si fuerais un cliente. Es la recepción de una clínica de prueba; no pasa nada."),
         el("p", {}, "Simón os llama en menos de una hora en horario de clínica y, si no cogéis, os escribe." +
-          (sinAviso ? " Si no os llama nadie, escribidle a simon@trustpulse.es." : ""))));
+          (sinAviso ? " Si no os llama nadie, escribidle a simon@encuesta.trustpulse.es." : ""))));
     }
     if (e.guardado === "fallo") {
       caja.appendChild(el("p", { clase: "encuesta-aviso", role: "status" }, "No hemos podido guardar vuestras respuestas. ",
         el("button", { type: "button", texto: "Volver a intentarlo", alClick: function () { guardar(true); } })));
     } else if (!codigo || e.guardado === "desconocido") {
       caja.appendChild(el("p", { clase: "encuesta-aviso", role: "status" }, "Con este enlace no reconocemos vuestra clínica, así que no se ha guardado nada. Abrid la encuesta desde el correo o escribidme a ",
-        el("a", { href: "mailto:simon@trustpulse.es", texto: "simon@trustpulse.es" }), "."));
+        el("a", { href: "mailto:simon@encuesta.trustpulse.es", texto: "simon@encuesta.trustpulse.es" }), "."));
     }
-    caja.appendChild(el("p", { clase: "encuesta-firma" }, "Simón · ", el("a", { href: "mailto:simon@trustpulse.es", texto: "simon@trustpulse.es" })));
+    caja.appendChild(el("p", { clase: "encuesta-firma" }, "Simón · ", el("a", { href: "mailto:simon@encuesta.trustpulse.es", texto: "simon@encuesta.trustpulse.es" })));
     cuerpo.appendChild(caja);
   }
 

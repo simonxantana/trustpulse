@@ -309,8 +309,8 @@
       caja.appendChild(el("div", { clase: "encuesta-demo", role: "status" },
         el("p", {}, "Como habéis pedido verlo: lo más rápido es llamar ahora al ", el("a", { href: "tel:+34951791054", texto: "951 79 10 54" }),
           " y pedir cita para vuestro perro como si fuerais un cliente. Es la recepción de una clínica de prueba; no pasa nada."),
-        el("p", {}, "Simón os llama en menos de una hora en horario de clínica y, si no cogéis, os escribe." +
-          (sinAviso ? " Si no os llama nadie, escribidle a simon@encuesta.trustpulse.es." : ""))));
+        el("p", {}, "Hoy mismo os escribimos cómo probarlo en vuestra clínica, o el siguiente día laborable a primera hora si ya es tarde." +
+          (sinAviso ? " Si no os llega nada, escribidle a simon@encuesta.trustpulse.es." : ""))));
     }
     if (e.guardado === "fallo") {
       caja.appendChild(el("p", { clase: "encuesta-aviso", role: "status" }, "No hemos podido guardar vuestras respuestas. ",

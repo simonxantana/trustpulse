@@ -309,7 +309,7 @@
       caja.appendChild(el("div", { clase: "encuesta-demo", role: "status" },
         el("p", {}, "Como habéis pedido verlo: lo más rápido es llamar ahora al ", el("a", { href: "tel:+34951791054", texto: "951 79 10 54" }),
           " y pedir cita para vuestro perro como si fuerais un cliente. Es la recepción de una clínica de prueba; no pasa nada."),
-        el("p", {}, "Hoy mismo os escribimos cómo probarlo en vuestra clínica, o el siguiente día laborable a primera hora si ya es tarde." +
+        el("p", {}, "En unos minutos os llega un correo para probarlo en vuestra clínica, con un mes gratis. Si no lo veis, mirad en el correo no deseado." +
           (sinAviso ? " Si no os llega nada, escribidle a simon@encuesta.trustpulse.es." : ""))));
     }
     if (e.guardado === "fallo") {
